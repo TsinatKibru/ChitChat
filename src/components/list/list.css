@@ -1,0 +1,22 @@
+.list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+::-webkit-scrollbar {
+    width: 10px; /* Set scrollbar width */
+  }
+  
+  /* This will change the scrollbar thumb color */
+  ::-webkit-scrollbar-thumb {
+    background-color: #dddddd35; 
+    
+  }
+  
+  /* This will change the scrollbar track color */
+  ::-webkit-scrollbar-track {
+    background: #dddddd35; 
+  }
