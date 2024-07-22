@@ -1,13 +1,13 @@
-import React from 'react'
+
 import './list.css'
 import UserInfo from './userinfo/UserInfo'
 import ChatList from './chatlist/ChatList'
 
-const List = () => {
+const List = ({setActiveComponent}) => {
   return (
     <div className='list'>
-     <UserInfo/>
-     <ChatList/>
+     <UserInfo setActiveComponent={setActiveComponent}/>
+     <ChatList setActiveComponent={setActiveComponent}/>
     </div>
   )
 }

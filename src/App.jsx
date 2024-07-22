@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Chat from "./components/chat/Chat"
 import Detail from "./components/detail/Detail"
 import List from "./components/list/List"
@@ -12,6 +12,10 @@ import { useChatStore } from "./lib/chatStore"
 const App = () => {
 
   const {currentUser , isLoading ,fetchUserInfo} = useUserStore()
+  const [activeComponent, setActiveComponent] = useState("List");
+  useEffect(()=>{
+    console.log("activeComponent",activeComponent)
+  },[activeComponent])
 
   const {chatId} = useChatStore()
   useEffect(()=>{
@@ -29,13 +33,16 @@ const App = () => {
     <div className="loading">Loading...</div>
   )
 
+  
+
   return (
     <div className='container'>
      {currentUser?(
        <>
-       <List/>
-       {chatId && <Chat/>}
-       {chatId &&<Detail/>}
+       <div className={`${activeComponent === "List" ? "block md:block" : "hidden md:block"} flex-1`}><List setActiveComponent={setActiveComponent}/></div>
+       {chatId &&  <div className={`${activeComponent === "Chat" ? "block md:block" : "hidden md:block"} flex-2` }><Chat setActiveComponent={setActiveComponent}/></div>}
+       {chatId &&  <div className={`${activeComponent === "Detail" ? "block md:block" : "hidden md:block"} flex-1`}><Detail setActiveComponent={setActiveComponent}/></div>}
+      
        </>
      ):(<Login/>)}
      <Notification/>

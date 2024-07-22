@@ -6,7 +6,7 @@ import { doc, getDoc, onSnapshot, updateDoc } from "firebase/firestore";
 import { db } from "../../../lib/firebase";
 import { useChatStore } from "../../../lib/chatStore";
 
-const ChatList = () => {
+const ChatList = ({setActiveComponent}) => {
   const [addMode, setAddMode] = useState(false);
   const [chats, setChats] = useState([]);
   const [input, setInput] = useState("");
@@ -51,6 +51,7 @@ const ChatList = () => {
         chats: userChats,
       });
       changeChat(chat.chatId, chat.user);
+      setActiveComponent("Chat")
     } catch (error) {
       console.log(error);
     }
@@ -108,7 +109,7 @@ const ChatList = () => {
         </div>
       ))}
 
-      {addMode && <AddUser />}
+      {addMode && <AddUser setAddMode={setAddMode}/>}
     </div>
   );
 };

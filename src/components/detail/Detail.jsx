@@ -1,34 +1,36 @@
-import React from "react";
 import "./detail.css";
 import { auth, db } from "../../lib/firebase";
 import { useChatStore } from "../../lib/chatStore";
 import { useUserStore } from "../../lib/userStore";
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
+import { FaArrowLeft } from "react-icons/fa";
 
-const Detail = () => {
+const Detail = ({ setActiveComponent }) => {
+  const { changeBlock, chatId, user, isReceiverBlocked, isCurrentUserBlocked } =
+    useChatStore();
+  const { currentUser } = useUserStore();
 
-  const { changeBlock ,chatId , user , isReceiverBlocked , isCurrentUserBlocked  } = useChatStore();
-  const {currentUser} = useUserStore()
-
-  const handleBlock = async()=>{
-
-    if(!user) return
-    const userDocRef = doc(db , "users",currentUser.id)
+  const handleBlock = async () => {
+    if (!user) return;
+    const userDocRef = doc(db, "users", currentUser.id);
 
     try {
-
-        await updateDoc(userDocRef ,{
-          blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id)
-
-        })
-       changeBlock()
+      await updateDoc(userDocRef, {
+        blocked: isReceiverBlocked ? arrayRemove(user.id) : arrayUnion(user.id),
+      });
+      changeBlock();
     } catch (error) {
-      console.log("blockError",error)
-      
+      console.log("blockError", error);
     }
-  }
+  };
   return (
-    <div className="detail">
+    <div className="detail ">
+      <div className="header flex md:hidden items-center justify-start px-4 py-3 bg-darkblue border-b">
+        <FaArrowLeft
+          className="back-icon text-gray-600 hover:text-gray-300 cursor-pointer"
+          onClick={() => setActiveComponent("Chat")}
+        />
+      </div>
       <div className="user">
         <img src={user?.avatar || "/avatar.png"} alt="" />
         <h2>{user?.username}</h2>
@@ -81,7 +83,6 @@ const Detail = () => {
               </div>
               <img src="/download.png" alt="" />
             </div>
-            
           </div>
         </div>
         <div className="option">
@@ -90,8 +91,16 @@ const Detail = () => {
             <img src="/arrowUp.png" alt="" />
           </div>
         </div>
-        <button onClick={handleBlock}>{isCurrentUserBlocked ? "You are blocked"  :isReceiverBlocked ? "UNBlock User": "Block User"}</button>
-        <button className="logout" onClick={()=>auth.signOut()}>Logout</button>
+        <button onClick={handleBlock}>
+          {isCurrentUserBlocked
+            ? "You are blocked"
+            : isReceiverBlocked
+            ? "UNBlock User"
+            : "Block User"}
+        </button>
+        <button className="logout" onClick={() => auth.signOut()}>
+          Logout
+        </button>
       </div>
     </div>
   );

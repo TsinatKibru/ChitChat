@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 * {
   margin: 0;
   padding: 0;
@@ -15,7 +19,8 @@ body {
   color: white;
 }
 .container{
-  width: 90vw;
+  overflow: hidden;
+  width: 100vw;
   height: 90vh;
   background-color: rgba(17, 25, 40, 0.75);
   backdrop-filter: blur(19px) saturate(180%);
