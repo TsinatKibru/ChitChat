@@ -12,7 +12,7 @@ const ChatList = ({setActiveComponent}) => {
   const [input, setInput] = useState("");
 
   const { currentUser } = useUserStore();
-  const { chatId, changeChat } = useChatStore();
+  const { chatId, changeChat ,user } = useChatStore();
   useEffect(() => {
     const unSub = onSnapshot(
       doc(db, "userchats", currentUser.id),
@@ -37,6 +37,7 @@ const ChatList = ({setActiveComponent}) => {
   }, [currentUser.id]);
 
   const handleSelect = async (chat) => {
+    console.log("user and chat" ,user , chat)
     const userChats = chats.map((item) => {
       const { user, ...rest } = item;
       return rest;
@@ -87,7 +88,8 @@ const ChatList = ({setActiveComponent}) => {
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
           style={{
-            backgroundColor: chat?.isSeen ? "transparent" : "#5183fe",
+            backgroundColor: chat?.isSeen ? (chat?.user?.id === user?.id ? "#75816b" : "transparent") : "#5183fe",
+            //  backgroundColor: chat?.user.id === user.id ? "#364a5e" : "transparent"
           }}
         >
           <img

@@ -17,6 +17,11 @@ const Detail = ({ setActiveComponent }) => {
     useChatStore();
   const { currentUser } = useUserStore();
   const [images, setImages] = useState([]);
+  const [isPhotosVisible, setIsPhotosVisible] = useState(false);
+
+  const togglePhotosVisibility = () => {
+    setIsPhotosVisible(!isPhotosVisible);
+  };
 
   useEffect(() => {
     const unSub = onSnapshot(doc(db, "chats", chatId), async (res) => {
@@ -44,25 +49,26 @@ const Detail = ({ setActiveComponent }) => {
     }
   };
 
-  function getImageName(url) {
-    if (url === undefined || url === "") return;
-    const pathPart = url.split('/o/')[1];
-    // Extract the encoded image path before the query parameters
-    const encodedImagePath = pathPart.split('?')[0];
-    // Decode the URI component to get the actual image path
-    const decodedImagePath = decodeURIComponent(encodedImagePath);
-    // Extract the full path without dates
-    const segments = decodedImagePath.split('/');
-    // Get the last segment (which should be the image name with date)
-    const lastSegment = segments.pop();
-    // Extract the image name by removing the date part
-    const imageName = lastSegment.split(')').pop();
-    return imageName;
-  }
+  const getImageName = (url) => {
+    if (!url) return '';
+    try {
+      const pathPart = url.split("/o/")[1];
+      const encodedImagePath = pathPart.split("?")[0];
+      const decodedImagePath = decodeURIComponent(encodedImagePath);
+      const segments = decodedImagePath.split("/");
+      const lastSegment = segments.pop();
+      const imageName = lastSegment.split(")").pop();
+      return imageName || 'downloaded_image';
+    } catch (error) {
+      console.error('Failed to parse image URL:', error);
+      return 'downloaded_image';
+    }
+  };
 
-  const imgURL = "https://firebasestorage.googleapis.com/v0/b/reactchat-98195.appspot.com/o/images%2FFri%20Jul%2019%202024%2013%3A52%3A50%20GMT%2B0300%20(East%20Africa%20Time)favicon.png?alt=media&token=e8142d31-e5a9-490a-a393-118c621f58a2";
-const imageName = getImageName(imgURL);
-console.log(imageName);
+  const imgURL =
+    "https://firebasestorage.googleapis.com/v0/b/reactchat-98195.appspot.com/o/images%2FFri%20Jul%2019%202024%2013%3A52%3A50%20GMT%2B0300%20(East%20Africa%20Time)favicon.png?alt=media&token=e8142d31-e5a9-490a-a393-118c621f58a2";
+  const imageName = getImageName(imgURL);
+  console.log(imageName);
   return (
     <div className="detail ">
       <div className="header flex md:hidden items-center justify-start px-4 py-3  ">
@@ -90,33 +96,49 @@ console.log(imageName);
           </div>
         </div>
         <div className="option">
-          <div className="title">
+          <div className="title" onClick={togglePhotosVisibility} >
             <span>Shared Photos</span>
-            <img src="/arrowDown.png" alt="" />
+            {/* <img src="/arrowDown.png" alt="" /> */}
+            <img src={isPhotosVisible ? "/arrowUp.png" : "/arrowDown.png"} alt="Toggle arrow" />
           </div>
+          
+           {isPhotosVisible && (
           <div className="photos">
-            {images !== null &&
-              images.map((item) => (
-                <div
-                  className={` ${item?.img === undefined && "hidden"} flex justify-between items-center  `}
-                  key={item.createdAt}
-                >
-                  <div className="flex items-center gap-20">
-                    <img className="w-10 h-10 object-cover " src={item?.img} alt="" />
-                    <span>{getImageName(item?.img)}</span>
+            {images?.length > 0 ? (
+              images.map((item) => {
+                const { img, createdAt } = item;
+
+                // Skip items without an image
+                if (!img) return null;
+
+                return (
+                  <div
+                    className="flex justify-between items-center"
+                    key={createdAt}
+                  >
+                    <div className="flex items-center gap-4">
+                      <img
+                        className="w-10 h-10 object-cover"
+                        src={img}
+                        alt={getImageName(img)}
+                      />
+                      <span>{getImageName(img)}</span>
+                    </div>
+                    <a href={img} download={getImageName(img)} >
+                      <img
+                        className="w-5 h-5 object-cover"
+                        src="/download.png"
+                        alt="Download"
+                      />
+                    </a>
                   </div>
-                  <img className="w-5 h-5 object-cover " src="/download.png" alt="" />
-                </div>
-              ))}
-            
-            {/* <div className="photoItem">
-              <div className="photoDetail">
-                <img src="https://picsum.photos/seed/picsum/200/300" alt="" />
-                <span>photo.png</span>
-              </div>
-              <img src="/download.png" alt="" />
-            </div> */}
+                );
+              })
+            ) : (
+              <p>No images available</p>
+            )}
           </div>
+          )}
         </div>
         <div className="option">
           <div className="title">
