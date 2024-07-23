@@ -21,7 +21,7 @@ body {
 .container{
   overflow: hidden;
   width: 100vw;
-  height: 90vh;
+  height: 100vh;
   background-color: rgba(17, 25, 40, 0.75);
   backdrop-filter: blur(19px) saturate(180%);
   border-radius: 12px;

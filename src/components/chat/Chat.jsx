@@ -20,6 +20,7 @@ const Chat = ({ setActiveComponent }) => {
   const [chat, setChat] = useState();
   const [open, setOpen] = useState(false);
   const [text, setText] = useState("");
+  const emojiref = useRef();
   const [img, setImg] = useState({
     file: null,
     url: "",
@@ -133,10 +134,23 @@ const Chat = ({ setActiveComponent }) => {
     };
   }, [setDropdownOpen]);
 
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (emojiref.current && !emojiref.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setOpen]);
+
   return (
     <div className="chat">
       <div className="top">
-      <div className="header flex md:hidden justify-start  -mr-10  ">
+      <div className="header flex md:hidden justify-start    ">
         <FaArrowLeft
           className="back-icon text-white hover:text-gray-300 cursor-pointer"
           onClick={() => setActiveComponent("List")}
@@ -146,7 +160,7 @@ const Chat = ({ setActiveComponent }) => {
           <img src={user?.avatar || "/avatar.png"} alt="" />
           <div className="texts">
             <span>{user?.username}</span>
-            <p>Lorem ipsum dolor sit amet.</p>
+            <p className={`${dropdownOpen && 'blur-sm'}`}>Lorem ipsum dolor sit amet.</p>
           </div>
         </div>
         <div className="md:hidden relative">
@@ -155,7 +169,7 @@ const Chat = ({ setActiveComponent }) => {
             onClick={() => setDropdownOpen(!dropdownOpen)}
           />
           {dropdownOpen && (
-            <div className="iconsm absolute shadow-md p-2 rounded-lg right-5 bg-darkblue3 border-gray-500 border-2" ref={ref}>
+            <div className="iconsm absolute shadow-md p-2 rounded-lg right-5 bg-darkblue3 -mt-3 " ref={ref}>
             <div className="flex items-center mb-2 ">
               <img src="/phone.png" alt="phone" className="w-5 h-5 mr-2" />
               <span className="text-white text-sm">Phone</span>
@@ -237,7 +251,7 @@ const Chat = ({ setActiveComponent }) => {
             alt=""
             onClick={() => setOpen((prev) => !prev)}
           />
-          <div className="picker">
+          <div className="picker" ref={emojiref}>
             <EmojiPicker open={open} onEmojiClick={handleEmoji} />
           </div>
         </div>

@@ -25,9 +25,9 @@ const Detail = ({ setActiveComponent }) => {
   };
   return (
     <div className="detail ">
-      <div className="header flex md:hidden items-center justify-start px-4 py-3 bg-darkblue border-b">
+      <div className="header flex md:hidden items-center justify-start px-4 py-3  ">
         <FaArrowLeft
-          className="back-icon text-gray-600 hover:text-gray-300 cursor-pointer"
+          className="back-icon text-gray-200 hover:text-gray-300 cursor-pointer"
           onClick={() => setActiveComponent("Chat")}
         />
       </div>

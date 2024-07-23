@@ -5,6 +5,8 @@
     height: 100%;
     display: flex;
     flex-direction: column;
+   
+
 
     .top{
         padding: 20px;
@@ -148,12 +150,16 @@
         border-top: 1px solid #dddddd35;
         gap: 20px;
         margin-top: auto;
+        
+        
         @media (max-width: 768px) { /* Adjust the max-width as needed */
                 
             padding-top: 10px;
             padding-bottom: 10px;
             padding-left: 5px;
             padding-right: 5px;
+            gap: 5px;
+            
            
         
         }
@@ -182,7 +188,11 @@
             font-size: 16px;
             @media (max-width: 768px) { /* Adjust the max-width as needed */
                 
-                max-width: 220px;
+                max-width: 200px;
+                padding-top: 20px;
+                padding-bottom: 20px;
+                padding-left: 10px;
+                padding-right: 10px;
                
             
             }
@@ -195,10 +205,13 @@
             position: relative;
             cursor: pointer;
 
-            .picker{
+            .picker {
                 position: absolute;
-                bottom: 50px;
-                left: 0;
+                bottom: 100px; /* Position from the bottom */
+                right: 115px; /* Start from the center of the screen */
+                transform: translateX(-50%); /* Shift back half of its width to center it */
+                width: 100px; /* Adjust width if needed, accounting for left/right margins */
+                /* Optional: Add padding or other styles as needed */
             }
         }
 
