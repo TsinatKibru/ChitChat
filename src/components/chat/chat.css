@@ -175,6 +175,7 @@
             margin-left: 5px;
             width: 20px;
             height: 20px;
+            cursor: pointer;
         }
 
         input{
@@ -222,6 +223,13 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
+            @media (max-width: 768px) { /* Adjust the max-width as needed */
+                
+                padding: 5px 10px;
+                border-radius: 5px;
+               
+            
+            }
 
             &&:disabled{
                 background-color: #5182fe98;
