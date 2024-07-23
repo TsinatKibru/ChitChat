@@ -25,7 +25,7 @@ const App = () => {
     return ()=>{
       unSub();
     }
-  },[fetchUserInfo])
+  },[fetchUserInfo ])
 
   console.log(currentUser)
 
