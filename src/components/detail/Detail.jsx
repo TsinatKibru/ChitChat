@@ -24,10 +24,15 @@ const Detail = ({ setActiveComponent }) => {
   };
 
   useEffect(() => {
-    const unSub = onSnapshot(doc(db, "chats", chatId), async (res) => {
-      const items = res.data().messages;
+    // const unSub = onSnapshot(doc(db, "chats", chatId), async (res) => {
+    //   const items = res.data().messages;
 
-      setImages(items);
+    //   setImages(items);
+    // });
+    const unSub = onSnapshot(doc(db, "chats", chatId), (res) => {
+      const items = res.data().messages;
+      const filteredImages = items.filter((item) => item.img && item.img.trim() !== "");
+      setImages(filteredImages);
     });
 
     return () => {
@@ -65,10 +70,7 @@ const Detail = ({ setActiveComponent }) => {
     }
   };
 
-  const imgURL =
-    "https://firebasestorage.googleapis.com/v0/b/reactchat-98195.appspot.com/o/images%2FFri%20Jul%2019%202024%2013%3A52%3A50%20GMT%2B0300%20(East%20Africa%20Time)favicon.png?alt=media&token=e8142d31-e5a9-490a-a393-118c621f58a2";
-  const imageName = getImageName(imgURL);
-  console.log(imageName);
+  
   return (
     <div className="detail ">
       <div className="header flex md:hidden items-center justify-start px-4 py-3  ">
@@ -96,7 +98,7 @@ const Detail = ({ setActiveComponent }) => {
           </div>
         </div>
         <div className="option">
-          <div className="title" onClick={togglePhotosVisibility} >
+          <div className="title" onClick={()=>togglePhotosVisibility()} >
             <span>Shared Photos</span>
             {/* <img src="/arrowDown.png" alt="" /> */}
             <img src={isPhotosVisible ? "/arrowUp.png" : "/arrowDown.png"} alt="Toggle arrow" />
