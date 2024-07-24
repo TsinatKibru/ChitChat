@@ -82,15 +82,21 @@ const ChatList = ({setActiveComponent}) => {
           className="add"
         />
       </div>
+      {/* style={{
+            backgroundColor: chat?.isSeen ? (chat?.user?.id === user?.id ? "#75816b" : "transparent") : "#5183fe",
+           
+            
+          }} */}
       {filteredChats.map((chat) => (
         <div
-          className="item"
+        className={`
+          ${chat?.isSeen ? (chat?.user?.id === user?.id ? 'bg-transparent md:bg-[#a4ac9e4f]' : 'bg-transparent') : 'bg-[#5183fe]'}
+          p-4 rounded
+        item`}
           key={chat.chatId}
           onClick={() => handleSelect(chat)}
-          style={{
-            backgroundColor: chat?.isSeen ? (chat?.user?.id === user?.id ? "#75816b" : "transparent") : "#5183fe",
-            //  backgroundColor: chat?.user.id === user.id ? "#364a5e" : "transparent"
-          }}
+          
+          
         >
           <img
             src={

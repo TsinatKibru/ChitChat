@@ -15,6 +15,7 @@ import { useUserStore } from "../../lib/userStore";
 import upload from "../../services/upload";
 import { FaArrowLeft, FaEllipsisV } from "react-icons/fa"; // Using react-icons for the three-dotted icon
 import { BiDetail } from "react-icons/bi";
+import { format } from "timeago.js";
 
 const Chat = ({ setActiveComponent }) => {
   const [chat, setChat] = useState();
@@ -116,11 +117,11 @@ const Chat = ({ setActiveComponent }) => {
 
     setText("");
   };
-  const handleSetActiveComp=()=>{
-    setDropdownOpen(false)
-    setActiveComponent("Detail")
-  }
-  
+  const handleSetActiveComp = () => {
+    setDropdownOpen(false);
+    setActiveComponent("Detail");
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (ref.current && !ref.current.contains(event.target)) {
@@ -150,17 +151,19 @@ const Chat = ({ setActiveComponent }) => {
   return (
     <div className="chat">
       <div className="top">
-      <div className="header flex md:hidden justify-start    ">
-        <FaArrowLeft
-          className="back-icon text-white hover:text-gray-300 cursor-pointer"
-          onClick={() => setActiveComponent("List")}
-        />
-      </div>
+        <div className="header flex md:hidden justify-start    ">
+          <FaArrowLeft
+            className="back-icon text-white hover:text-gray-300 cursor-pointer"
+            onClick={() => setActiveComponent("List")}
+          />
+        </div>
         <div className="user">
           <img src={user?.avatar || "/avatar.png"} alt="" />
           <div className="texts">
             <span>{user?.username}</span>
-            <p className={`${dropdownOpen && 'blur-sm'}`}>Lorem ipsum dolor sit amet.</p>
+            <p className={`${dropdownOpen && "blur-sm"}`}>
+              Lorem ipsum dolor sit amet.
+            </p>
           </div>
         </div>
         <div className="md:hidden relative">
@@ -169,22 +172,27 @@ const Chat = ({ setActiveComponent }) => {
             onClick={() => setDropdownOpen(!dropdownOpen)}
           />
           {dropdownOpen && (
-            <div className="iconsm absolute shadow-md p-2 rounded-lg right-5 bg-darkblue3 -mt-3 " ref={ref}>
-            <div className="flex items-center mb-2 ">
-              <img src="/phone.png" alt="phone" className="w-5 h-5 mr-2" />
-              <span className="text-white text-sm">Phone</span>
+            <div
+              className="iconsm absolute shadow-md p-2 rounded-lg right-5 bg-darkblue3 -mt-3 "
+              ref={ref}
+            >
+              <div className="flex items-center mb-2 ">
+                <img src="/phone.png" alt="phone" className="w-5 h-5 mr-2" />
+                <span className="text-white text-sm">Phone</span>
+              </div>
+              <div className="flex items-center mb-2">
+                <img src="/video.png" alt="video" className="w-5 h-5 mr-2" />
+                <span className="text-white text-sm">Video</span>
+              </div>
+
+              <div
+                className="flex items-center mb-2 cursor-pointer"
+                onClick={handleSetActiveComp}
+              >
+                <img src="/info.png" alt="info" className="w-5 h-5 mr-2" />
+                <span className="text-white text-sm">Details</span>
+              </div>
             </div>
-            <div className="flex items-center mb-2">
-              <img src="/video.png" alt="video" className="w-5 h-5 mr-2" />
-              <span className="text-white text-sm">Video</span>
-            </div>
-           
-            <div className="flex items-center mb-2 cursor-pointer" onClick={handleSetActiveComp}>
-            <img src="/info.png" alt="info" className="w-5 h-5 mr-2" />
-              <span className="text-white text-sm">Details</span>
-            </div>
-          </div>
-          
           )}
         </div>
 
@@ -195,6 +203,17 @@ const Chat = ({ setActiveComponent }) => {
         </div>
       </div>
       <div className="center">
+        {chat?.messages?.length === 0 && (
+          <div className="flex flex-col items-center justify-center px-10 py-40 md:p-52 mt-4">
+            <h2 className="text-xl font-semibold text-gray-400 mb-4">
+              No Conversations Yet
+            </h2>
+            <p className="text-center text-gray-00 italic">
+              It seems you haven&apos;t started a chat. Reach out to begin a
+              conversation!
+            </p>
+          </div>
+        )}
         {chat?.messages?.map((message) => (
           <div
             className={
@@ -205,7 +224,7 @@ const Chat = ({ setActiveComponent }) => {
             <div className="texts">
               {message.img && <img src={message.img} alt="" />}
               {message.text && <p>{message.text}</p>}
-              <span>1 min ago</span>
+              <span>{format(message.createdAt.toDate())}</span>
             </div>
           </div>
         ))}

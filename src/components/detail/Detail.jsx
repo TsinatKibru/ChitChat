@@ -135,7 +135,8 @@ const Detail = ({ setActiveComponent }) => {
                 );
               })
             ) : (
-              <p>No images available</p>
+              <p className="text-center text-gray-500 text-lg italic mt-4">...No images available</p>
+
             )}
           </div>
           )}
